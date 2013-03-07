@@ -7,6 +7,7 @@ import org.dom4j.Element;
 
 import ltg.ps.api.phenomena.Phenomena;
 import ltg.ps.api.phenomena.PhenomenaCommand;
+import ltg.ps.api.phenomena.PhenomenaWindow;
 
 /**
  * TODO Description
@@ -18,9 +19,8 @@ public class EditWindow extends PhenomenaCommand {
 	/**
 	 * @param target
 	 */
-	public EditWindow(Phenomena target) {
-		super(target);
-		// TODO Auto-generated constructor stub
+	public EditWindow(Phenomena target, PhenomenaWindow origin) {
+		super(target, origin);
 	}
 
 	/* (non-Javadoc)
@@ -39,14 +39,4 @@ public class EditWindow extends PhenomenaCommand {
 	public void parse(Element e) {
 		System.err.println(e.asXML());
 	}
-
-	/* (non-Javadoc)
-	 * @see ltg.ps.api.Command#toXML()
-	 */
-	@Override
-	public String toXML() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

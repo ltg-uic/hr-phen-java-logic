@@ -5,6 +5,7 @@ package ltg.ps.phenomena.helioroom.commands;
 
 import ltg.ps.api.phenomena.Phenomena;
 import ltg.ps.api.phenomena.PhenomenaCommand;
+import ltg.ps.api.phenomena.PhenomenaWindow;
 import ltg.ps.phenomena.helioroom.Helioroom;
 import ltg.ps.phenomena.helioroom.Planet;
 
@@ -22,8 +23,8 @@ public class EditPlanet extends PhenomenaCommand {
 	/**
 	 * @param target
 	 */
-	public EditPlanet(Phenomena target) {
-		super(target);
+	public EditPlanet(Phenomena target, PhenomenaWindow origin) {
+		super(target, origin);
 	}
 
 	/* (non-Javadoc)
@@ -52,13 +53,5 @@ public class EditPlanet extends PhenomenaCommand {
 			modifiedPlanet.setStartPosition(Double.valueOf(value));
 	}
 
-	/* (non-Javadoc)
-	 * @see ltg.ps.api.Command#toXML()
-	 */
-	@Override
-	public String toXML() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

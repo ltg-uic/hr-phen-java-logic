@@ -5,6 +5,7 @@ package ltg.ps.phenomena.helioroom.commands;
 
 import ltg.ps.api.phenomena.Phenomena;
 import ltg.ps.api.phenomena.PhenomenaCommand;
+import ltg.ps.api.phenomena.PhenomenaWindow;
 import ltg.ps.phenomena.helioroom.Helioroom;
 
 import org.dom4j.Element;
@@ -23,8 +24,8 @@ public class EditState extends PhenomenaCommand {
 	/**
 	 * @param target
 	 */
-	public EditState(Phenomena target) {
-		super(target);
+	public EditState(Phenomena target, PhenomenaWindow origin) {
+		super(target, origin);
 	}
 
 	
@@ -58,15 +59,6 @@ public class EditState extends PhenomenaCommand {
 		else 
 			log.error("Impossible to parse state of phenomena!");
 		
-	}
-
-	/* (non-Javadoc)
-	 * @see ltg.ps.api.Command#toXML()
-	 */
-	@Override
-	public String toXML() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
