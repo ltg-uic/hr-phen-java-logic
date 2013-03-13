@@ -16,7 +16,7 @@ public class Loader {
 		// Configure the phenomena debugger
 		PhenomenaDebugger.configure("ps_dev@54.243.60.48", "ps_dev");
 		// Start the debugger
-		PhenomenaDebugger.debug("");
+		PhenomenaDebugger.debug("target/helioroom-0.1.jar");
 	}
 
 }

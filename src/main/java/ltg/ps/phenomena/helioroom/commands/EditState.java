@@ -49,11 +49,11 @@ public class EditState extends PhenomenaCommand {
 	public void parse(Element xml) {
 		if (xml.getTextTrim().equals("pause")) {
 			// Save the pause timestamp
-			state = Helioroom.PAUSED;
+			state = Helioroom.STATE_PAUSED;
 			pauseTS = Long.valueOf(xml.attribute("ts").getText());
 		} else if (xml.getTextTrim().equals("resume")) {
 			// save the resume timestamp
-			state = Helioroom.RUNNING;
+			state = Helioroom.STATE_RUNNING;
 			resumeTS = Long.valueOf(xml.attribute("ts").getText());
 		}
 		else 

@@ -27,31 +27,32 @@ import org.dom4j.io.XMLWriter;
  * @author Gugo
  */
 public class Helioroom extends PassivePhenomena {
-	
+
 	// Planets representation constants
-	public final static String IMAGES 	= "images";
-	public final static String SPHERES 	= "spheres";
-	
+	public final static String REP_IMAGE 		= "image";
+	public final static String REP_SPHERE 		= "sphere";
+
 	// Planets names constants
-	public final static String NONE 	= "none";
-	public final static String NAMES 	= "names";
-	public final static String COLORS 	= "color";
-	
+	public final static String LABEL_NONE 		= "none";
+	public final static String LABEL_NAME 		= "name";
+	public final static String LABEL_COLOR 		= "color";
+
 	// State constants
-	public final static String RUNNING 	= "running";
-	public final static String PAUSED 	= "paused";
+	public final static String STATE_RUNNING	= "running";
+	public final static String STATE_PAUSED 	= "paused";
+
 
 	// Simulation data
 	private String planetRepresentation = null;
 	private String planetNames = null;
 	private long startTime = -1;
 	private List<Planet> planets = null;
-	private String state = RUNNING;
+	private String state = STATE_RUNNING;
 	private long startOfLastPauseTime = -1;
-	
+
 	// Components
 	private HelioroomPersistence db = null;
-	
+
 
 	public Helioroom(String instanceId) {
 		super(instanceId);
@@ -74,8 +75,6 @@ public class Helioroom extends PassivePhenomena {
 			doc = DocumentHelper.parseText(configXML);
 			Element el = doc.getRootElement();
 			// Phenomena properties
-			planetRepresentation = el.elementTextTrim("planetRepresentation");
-			planetNames = el.elementTextTrim("planetNames");
 			if(el.elementTextTrim("state")!=null && !el.elementTextTrim("state").equals(""))
 				state = el.elementTextTrim("state");
 			if(el.elementTextTrim("startOfLastPauseTime")!=null && !el.elementTextTrim("startOfLastPauseTime").equals(""))
@@ -88,7 +87,9 @@ public class Helioroom extends PassivePhenomena {
 						el1.elementTextTrim("color"),
 						el1.elementTextTrim("colorName"),
 						Integer.valueOf(el1.elementTextTrim("classOrbitalTime")),
-						Double.valueOf(el1.elementTextTrim("startPosition"))
+						Double.valueOf(el1.elementTextTrim("startPosition")),
+						el.elementTextTrim("representation"),
+						el.elementTextTrim("labelType")
 						));
 			}
 			sortPlanets();
@@ -99,7 +100,7 @@ public class Helioroom extends PassivePhenomena {
 		}
 	}
 
-	
+
 
 	@Override
 	public void configureWindows(String windowsXML) {
@@ -117,7 +118,7 @@ public class Helioroom extends PassivePhenomena {
 							e.attributeValue("id"),
 							Integer.valueOf(e.elementTextTrim("viewAngleBegin")),
 							Integer.valueOf(e.elementTextTrim("viewAngleEnd"))
-					));
+							));
 				}
 				if(e.attributeValue("type").equals("control")) {
 					phenWindows.add(new HelioroomControlWindow(e.attributeValue("id")));
@@ -126,25 +127,25 @@ public class Helioroom extends PassivePhenomena {
 					phenWindows.add(new HelioroomNotifierWindow(e.attributeValue("id")));
 				}
 			}
-		db.save();
+			db.save();
 		} catch (DocumentException e) {
 			log.info("Impossible to configure helioroom windows");
 		}
 	}
-	
-	
+
+
 	@Override
 	public void restore() {
 		db.restore();
 	}
-	
-	
+
+
 	@Override
 	public void cleanup() {
 		db.cleanup();
 	}
-	
-	
+
+
 	public String toXML() {
 		Element root = DocumentHelper.createElement(instanceName);
 		// Windows
@@ -169,10 +170,6 @@ public class Helioroom extends PassivePhenomena {
 		root.add(wins);
 		// Configuration
 		Element conf = DocumentHelper.createElement("config");
-		if(planetRepresentation!= null)
-			conf.addElement("planetRepresentation").addText(planetRepresentation);
-		if(planetNames!=null)
-			conf.addElement("planetNames").addText(planetNames);
 		if (state!=null)
 			conf.addElement("state").addText(state);
 		conf.addElement("startOfLastPauseTime").addText(String.valueOf(startOfLastPauseTime));
@@ -188,6 +185,8 @@ public class Helioroom extends PassivePhenomena {
 			e.addElement("colorName").addText(p.getColorName());
 			e.addElement("classOrbitalTime").addText(String.valueOf(p.getClassOrbitalTime()));
 			e.addElement("startPosition").addText(String.valueOf(p.getStartPosition()));
+			e.addElement("representation").addText(p.getRepresentation());
+			e.addElement("labelType").addText(p.getLabelType());
 			plans.add(e);
 		}
 		conf.add(plans);
@@ -195,9 +194,9 @@ public class Helioroom extends PassivePhenomena {
 		// Create document
 		return removeXMLDeclaration(DocumentHelper.createDocument(root));
 	}
-	
-	
-	
+
+
+
 	public String removeXMLDeclaration(Document doc) {
 		StringWriter w = new StringWriter();
 		OutputFormat f =  OutputFormat.createPrettyPrint();
@@ -212,7 +211,7 @@ public class Helioroom extends PassivePhenomena {
 	}
 
 
-	
+
 	public String getPlanetRepresentation() {
 		return planetRepresentation;
 	}
@@ -221,11 +220,11 @@ public class Helioroom extends PassivePhenomena {
 	public String getPlanetNames() {
 		return planetNames;
 	}
-	
+
 	public Long getStartTime() {
 		return startTime;
 	}
-	
+
 	public void setStartTime(long resumeTS) {
 		if (resumeTS!=-1 && startOfLastPauseTime!=-1) {
 			long delta = (resumeTS-startOfLastPauseTime)/1000;
@@ -235,8 +234,8 @@ public class Helioroom extends PassivePhenomena {
 		db.save();
 		notifyObservers();
 	}
-	
-	
+
+
 	public void setStartOfLastPauseTime(long startOfLastPauseTime) {
 		this.startOfLastPauseTime = startOfLastPauseTime;
 		db.save();
@@ -246,7 +245,7 @@ public class Helioroom extends PassivePhenomena {
 	public List<Planet> getPlanets() {
 		return planets;
 	}
-	
+
 	public Planet getPlanet(String planetName) {
 		for (Planet pl : planets) {
 			if (pl.getName().equals(planetName))
@@ -254,16 +253,16 @@ public class Helioroom extends PassivePhenomena {
 		}
 		return null;
 	}
-	
+
 	public String getState() {
 		return state;
 	}
-	
+
 	public void setState(String state) {
 		this.state = state;
 	}
-	
-	
+
+
 	public void modifyPlanet(Planet pl) {
 		if (planets.remove(pl))
 			planets.add(pl);
@@ -271,15 +270,15 @@ public class Helioroom extends PassivePhenomena {
 		db.save();
 		notifyObservers();
 	}
-	
-	
+
+
 	private void sortPlanets() {
 		Collections.sort(planets, new Comparator<Planet>() {
 			@Override
 			public int compare(Planet p1, Planet p2) {
 				return p1.getClassOrbitalTime() - p2.getClassOrbitalTime();
 			}
-			
+
 		});
 	}
 

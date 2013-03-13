@@ -39,8 +39,6 @@ public class HelioroomWindow extends PhenomenaWindow {
 		Element root = DocumentHelper.createElement("helioroom");
 		root.addElement("viewAngleBegin").addText(String.valueOf(viewAngleBegin));
 		root.addElement("viewAngleEnd").addText(String.valueOf(viewAngleEnd));
-		root.addElement("planetRepresentation").addText(String.valueOf(hr.getPlanetRepresentation()));
-		root.addElement("planetNames").addText(String.valueOf(hr.getPlanetNames()));
 		root.addElement("state").addText(String.valueOf(hr.getState()));
 		root.addElement("startTime").addText(String.valueOf(hr.getStartTime()));
 		Element plans = DocumentHelper.createElement("planets");
@@ -52,6 +50,8 @@ public class HelioroomWindow extends PhenomenaWindow {
 			e.addElement("colorName").addText(p.getColorName());
 			e.addElement("classOrbitalTime").addText(String.valueOf(p.getClassOrbitalTime()));
 			e.addElement("startPosition").addText(String.valueOf(p.getStartPosition()));
+			e.addElement("representation").addText(p.getRepresentation());
+			e.addElement("labelType").addText(p.getLabelType());
 			plans.add(e);
 		}
 		root.add(plans);

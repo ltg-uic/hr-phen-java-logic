@@ -7,14 +7,19 @@ public class Planet {
 	private String colorName = null;
 	private int classOrbitalTime = -1;
 	private double startPosition = 0;
+	private String representation = null;
+	private String labelType = null;
 	
 	
-	public Planet(String name, String color, String colorName, int classOrbitalTime, double startPosition) {
+	public Planet(String name, String color, String colorName, int classOrbitalTime, 
+			double startPosition, String representation, String labelType) {
 		this.name = name;
 		this.color = color;
 		this.colorName = colorName;
 		this.classOrbitalTime = classOrbitalTime;
 		this.startPosition = startPosition;
+		this.representation = representation;
+		this.labelType = labelType;
 	}
 
 
@@ -44,6 +49,26 @@ public class Planet {
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+
+
+	public String getRepresentation() {
+		return representation;
+	}
+
+
+	public String getLabelType() {
+		return labelType;
+	}
+
+
+	public void setRepresentation(String representation) {
+		this.representation = representation;
+	}
+
+
+	public void setLabelType(String labelType) {
+		this.labelType = labelType;
 	}
 
 
