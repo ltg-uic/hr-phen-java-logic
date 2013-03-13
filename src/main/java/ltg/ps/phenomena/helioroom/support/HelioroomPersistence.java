@@ -40,7 +40,7 @@ public class HelioroomPersistence extends Persistence {
 		readFile();
 		Element config = doc.getRootElement().element("config");
 		Element wins = doc.getRootElement().element("windows");
-		if(config!=null && config.element("planetRepresentation")!=null) {
+		if(config!=null) {
 			p.configure(config.asXML());
 		}
 		if(wins!=null) {
