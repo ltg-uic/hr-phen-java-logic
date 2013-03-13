@@ -88,8 +88,8 @@ public class Helioroom extends PassivePhenomena {
 						el1.elementTextTrim("colorName"),
 						Integer.valueOf(el1.elementTextTrim("classOrbitalTime")),
 						Double.valueOf(el1.elementTextTrim("startPosition")),
-						el.elementTextTrim("representation"),
-						el.elementTextTrim("labelType")
+						el1.elementTextTrim("representation"),
+						el1.elementTextTrim("labelType")
 						));
 			}
 			sortPlanets();
